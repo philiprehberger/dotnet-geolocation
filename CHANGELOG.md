@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 (2026-03-23)
+
+- Convert API documentation from bullet lists to table format
+- Fix license section formatting
+
 ## 0.1.0 (2026-03-22)
 
 - Initial release

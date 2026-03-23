@@ -39,10 +39,12 @@ var nearby = Geo.Filter(cities, vienna, radiusKm: 400); // Munich only
 
 ### `Geo`
 
-- `Distance(GeoCoordinate coord1, GeoCoordinate coord2, DistanceUnit unit = Kilometers)` — Calculates the great-circle distance using the Haversine formula.
-- `BoundingBox(GeoCoordinate center, double radiusKm)` — Returns min/max coordinates for a bounding box around the center point.
-- `IsWithinRadius(GeoCoordinate point, GeoCoordinate center, double radiusKm)` — Checks if a point is within the specified radius.
-- `Filter(IEnumerable<GeoCoordinate> points, GeoCoordinate center, double radiusKm)` — Returns all points within the specified radius.
+| Method | Description |
+|--------|-------------|
+| `Distance(GeoCoordinate coord1, GeoCoordinate coord2, DistanceUnit unit = Kilometers)` | Calculates the great-circle distance using the Haversine formula. |
+| `BoundingBox(GeoCoordinate center, double radiusKm)` | Returns min/max coordinates for a bounding box around the center point. |
+| `IsWithinRadius(GeoCoordinate point, GeoCoordinate center, double radiusKm)` | Checks if a point is within the specified radius. |
+| `Filter(IEnumerable<GeoCoordinate> points, GeoCoordinate center, double radiusKm)` | Returns all points within the specified radius. |
 
 ### `GeoCoordinate`
 
@@ -54,7 +56,9 @@ Enum: `Kilometers`, `Miles`, `Meters`, `NauticalMiles`.
 
 ### `Haversine`
 
-- `Calculate(GeoCoordinate coord1, GeoCoordinate coord2)` — Returns distance in kilometers using the Haversine formula.
+| Method | Description |
+|--------|-------------|
+| `Calculate(GeoCoordinate coord1, GeoCoordinate coord2)` | Returns distance in kilometers using the Haversine formula. |
 
 ## Development
 
@@ -64,4 +68,4 @@ dotnet build src/Philiprehberger.Geolocation.csproj --configuration Release
 
 ## License
 
-[MIT](LICENSE)
+MIT
