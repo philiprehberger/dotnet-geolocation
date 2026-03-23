@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RootNamespace>Philiprehberger.Geolocation</RootNamespace>
+
+    <PackageId>Philiprehberger.Geolocation</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Philip Rehberger</Authors>
+    <Description>Calculate distances between coordinates, find points within radius, and compute bounding boxes.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>geolocation;distance;coordinates;haversine;gps</PackageTags>
+    <RepositoryUrl>https://github.com/philiprehberger/dotnet-geolocation</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>
