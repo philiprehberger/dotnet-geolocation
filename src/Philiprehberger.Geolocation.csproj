@@ -10,7 +10,7 @@
     <RootNamespace>Philiprehberger.Geolocation</RootNamespace>
 
     <PackageId>Philiprehberger.Geolocation</PackageId>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <Authors>Philip Rehberger</Authors>
     <Description>Calculate distances between coordinates, find points within radius, and compute bounding boxes.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
