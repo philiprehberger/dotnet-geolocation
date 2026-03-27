@@ -3,6 +3,7 @@
 [![CI](https://github.com/philiprehberger/dotnet-geolocation/actions/workflows/ci.yml/badge.svg)](https://github.com/philiprehberger/dotnet-geolocation/actions/workflows/ci.yml)
 [![NuGet](https://img.shields.io/nuget/v/Philiprehberger.Geolocation.svg)](https://www.nuget.org/packages/Philiprehberger.Geolocation)
 [![License](https://img.shields.io/github/license/philiprehberger/dotnet-geolocation)](LICENSE)
+[![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
 
 Calculate distances between coordinates, find points within radius, and compute bounding boxes.
 
