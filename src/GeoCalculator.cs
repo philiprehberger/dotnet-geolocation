@@ -92,6 +92,89 @@ public static class GeoCalculator
     }
 
     /// <summary>
+    /// Computes the destination coordinate when travelling a given distance along an initial bearing
+    /// from a starting coordinate, using the spherical destination formula.
+    /// </summary>
+    /// <param name="start">The starting coordinate.</param>
+    /// <param name="bearingDegrees">The initial bearing in degrees (0-360, where 0 is north).</param>
+    /// <param name="distanceKm">The distance to travel in kilometers.</param>
+    /// <returns>The destination <see cref="GeoCoordinate"/>.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="distanceKm"/> is negative.</exception>
+    public static GeoCoordinate DestinationPoint(GeoCoordinate start, double bearingDegrees, double distanceKm)
+    {
+        if (distanceKm < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(distanceKm), distanceKm, "Distance must be non-negative.");
+        }
+
+        const double earthRadiusKm = 6371.0;
+        var angularDistance = distanceKm / earthRadiusKm;
+        var bearingRad = DegreesToRadians(bearingDegrees);
+        var lat1 = DegreesToRadians(start.Latitude);
+        var lon1 = DegreesToRadians(start.Longitude);
+
+        var lat2 = Math.Asin(
+            Math.Sin(lat1) * Math.Cos(angularDistance) +
+            Math.Cos(lat1) * Math.Sin(angularDistance) * Math.Cos(bearingRad));
+
+        var lon2 = lon1 + Math.Atan2(
+            Math.Sin(bearingRad) * Math.Sin(angularDistance) * Math.Cos(lat1),
+            Math.Cos(angularDistance) - Math.Sin(lat1) * Math.Sin(lat2));
+
+        // Normalize longitude to -180..180
+        lon2 = (lon2 + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
+
+        return new GeoCoordinate(RadiansToDegrees(lat2), RadiansToDegrees(lon2));
+    }
+
+    /// <summary>
+    /// Computes an intermediate coordinate along the great-circle path between two coordinates
+    /// at the given fraction of the total path (0.0 = <paramref name="a"/>, 1.0 = <paramref name="b"/>).
+    /// </summary>
+    /// <param name="a">The start coordinate.</param>
+    /// <param name="b">The end coordinate.</param>
+    /// <param name="fraction">A value in [0, 1] indicating where along the path to interpolate.</param>
+    /// <returns>The interpolated <see cref="GeoCoordinate"/>.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="fraction"/> is outside [0, 1].</exception>
+    public static GeoCoordinate IntermediatePoint(GeoCoordinate a, GeoCoordinate b, double fraction)
+    {
+        if (fraction is < 0.0 or > 1.0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(fraction), fraction, "Fraction must be between 0 and 1.");
+        }
+
+        var lat1 = DegreesToRadians(a.Latitude);
+        var lon1 = DegreesToRadians(a.Longitude);
+        var lat2 = DegreesToRadians(b.Latitude);
+        var lon2 = DegreesToRadians(b.Longitude);
+
+        var dLat = lat2 - lat1;
+        var dLon = lon2 - lon1;
+
+        var aHaversine = Math.Sin(dLat / 2) * Math.Sin(dLat / 2)
+                       + Math.Cos(lat1) * Math.Cos(lat2)
+                       * Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+        var delta = 2 * Math.Atan2(Math.Sqrt(aHaversine), Math.Sqrt(1 - aHaversine));
+
+        if (delta == 0.0)
+        {
+            return a;
+        }
+
+        var A = Math.Sin((1 - fraction) * delta) / Math.Sin(delta);
+        var B = Math.Sin(fraction * delta) / Math.Sin(delta);
+
+        var x = A * Math.Cos(lat1) * Math.Cos(lon1) + B * Math.Cos(lat2) * Math.Cos(lon2);
+        var y = A * Math.Cos(lat1) * Math.Sin(lon1) + B * Math.Cos(lat2) * Math.Sin(lon2);
+        var z = A * Math.Sin(lat1) + B * Math.Sin(lat2);
+
+        var midLat = Math.Atan2(z, Math.Sqrt(x * x + y * y));
+        var midLon = Math.Atan2(y, x);
+
+        return new GeoCoordinate(RadiansToDegrees(midLat), RadiansToDegrees(midLon));
+    }
+
+    /// <summary>
     /// Converts degrees to radians.
     /// </summary>
     /// <param name="degrees">The angle in degrees.</param>

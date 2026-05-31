@@ -183,4 +183,68 @@ public class GeoCalculatorTests
 
         Assert.Throws<ArgumentOutOfRangeException>(() => GeoCalculator.ClosestTo(target, candidates, count: 0));
     }
+
+    [Fact]
+    public void DestinationPoint_TravelsAlongBearing_DistanceMatches()
+    {
+        var start = new GeoCoordinate(48.2082, 16.3738);
+        var destination = GeoCalculator.DestinationPoint(start, bearingDegrees: 90.0, distanceKm: 100.0);
+
+        var measured = Geo.Distance(start, destination);
+        Assert.InRange(measured, 99.0, 101.0);
+    }
+
+    [Fact]
+    public void DestinationPoint_NegativeDistance_ThrowsArgumentOutOfRangeException()
+    {
+        var start = new GeoCoordinate(0.0, 0.0);
+        Assert.Throws<ArgumentOutOfRangeException>(() => GeoCalculator.DestinationPoint(start, 0.0, -1.0));
+    }
+
+    [Fact]
+    public void IntermediatePoint_FractionZero_ReturnsStart()
+    {
+        var a = new GeoCoordinate(48.2082, 16.3738);
+        var b = new GeoCoordinate(52.5200, 13.4050);
+
+        var result = GeoCalculator.IntermediatePoint(a, b, 0.0);
+
+        Assert.Equal(a.Latitude, result.Latitude, 5);
+        Assert.Equal(a.Longitude, result.Longitude, 5);
+    }
+
+    [Fact]
+    public void IntermediatePoint_FractionOne_ReturnsEnd()
+    {
+        var a = new GeoCoordinate(48.2082, 16.3738);
+        var b = new GeoCoordinate(52.5200, 13.4050);
+
+        var result = GeoCalculator.IntermediatePoint(a, b, 1.0);
+
+        Assert.Equal(b.Latitude, result.Latitude, 5);
+        Assert.Equal(b.Longitude, result.Longitude, 5);
+    }
+
+    [Fact]
+    public void IntermediatePoint_FractionHalf_RoughlyMatchesMidpoint()
+    {
+        var a = new GeoCoordinate(48.2082, 16.3738);
+        var b = new GeoCoordinate(52.5200, 13.4050);
+
+        var halfway = GeoCalculator.IntermediatePoint(a, b, 0.5);
+        var midpoint = GeoCalculator.Midpoint(a, b);
+
+        Assert.Equal(midpoint.Latitude, halfway.Latitude, 4);
+        Assert.Equal(midpoint.Longitude, halfway.Longitude, 4);
+    }
+
+    [Fact]
+    public void IntermediatePoint_FractionOutsideRange_ThrowsArgumentOutOfRangeException()
+    {
+        var a = new GeoCoordinate(0.0, 0.0);
+        var b = new GeoCoordinate(1.0, 1.0);
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => GeoCalculator.IntermediatePoint(a, b, -0.1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => GeoCalculator.IntermediatePoint(a, b, 1.1));
+    }
 }

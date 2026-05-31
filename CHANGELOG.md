@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0 (2026-05-30)
+
+- Add `GeoCalculator.DestinationPoint(start, bearingDegrees, distanceKm)` to compute the destination after travelling a distance on an initial bearing
+- Add `GeoCalculator.IntermediatePoint(a, b, fraction)` to interpolate along the great-circle path between two coordinates
+- Add card image to README
+
 ## 0.2.1 (2026-03-31)
 
 - Standardize README to 3-badge format with emoji Support section

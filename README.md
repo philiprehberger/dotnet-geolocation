@@ -4,6 +4,8 @@
 [![NuGet](https://img.shields.io/nuget/v/Philiprehberger.Geolocation.svg)](https://www.nuget.org/packages/Philiprehberger.Geolocation)
 [![Last updated](https://img.shields.io/github/last-commit/philiprehberger/dotnet-geolocation)](https://github.com/philiprehberger/dotnet-geolocation/commits/main)
 
+![Philiprehberger.Geolocation](https://raw.githubusercontent.com/philiprehberger/dotnet-geolocation/main/package-card.webp)
+
 Calculate distances between coordinates, find points within radius, and compute bounding boxes.
 
 ## Installation
@@ -75,6 +77,35 @@ var closest = GeoCalculator.ClosestTo(vienna, cities);          // Bratislava
 var top2 = GeoCalculator.ClosestTo(vienna, cities, count: 2);   // Bratislava, Berlin
 ```
 
+### Destination Point
+
+```csharp
+using Philiprehberger.Geolocation;
+
+var vienna = new GeoCoordinate(48.2082, 16.3738);
+
+// Travel 100 km due north (bearing 0°)
+var north100 = GeoCalculator.DestinationPoint(vienna, 0.0, 100.0);
+
+// Travel 50 km east-northeast (bearing 70°)
+var east50 = GeoCalculator.DestinationPoint(vienna, 70.0, 50.0);
+```
+
+### Intermediate Point
+
+```csharp
+using Philiprehberger.Geolocation;
+
+var vienna = new GeoCoordinate(48.2082, 16.3738);
+var berlin = new GeoCoordinate(52.5200, 13.4050);
+
+// Point 25% of the way from Vienna toward Berlin
+var quarter = GeoCalculator.IntermediatePoint(vienna, berlin, 0.25);
+
+// Midpoint via interpolation (matches GeoCalculator.Midpoint)
+var middle = GeoCalculator.IntermediatePoint(vienna, berlin, 0.5);
+```
+
 ### DMS Coordinate Parsing
 
 ```csharp
@@ -112,6 +143,8 @@ if (GeoCoordinate.TryParse("48.2082, 16.3738", out var result))
 | `Midpoint(GeoCoordinate a, GeoCoordinate b)` | Calculates the geographic midpoint using the spherical midpoint formula. |
 | `Bearing(GeoCoordinate from, GeoCoordinate to)` | Calculates the initial bearing in degrees (0-360) using the forward azimuth formula. |
 | `ClosestTo(GeoCoordinate target, IEnumerable<GeoCoordinate> candidates, int count = 1)` | Finds the K nearest coordinates to the target, ordered by distance. |
+| `DestinationPoint(GeoCoordinate start, double bearingDegrees, double distanceKm)` | Computes the destination after travelling a distance on an initial bearing. |
+| `IntermediatePoint(GeoCoordinate a, GeoCoordinate b, double fraction)` | Interpolates along the great-circle path between two coordinates. |
 
 ### `GeoCoordinate`
 
